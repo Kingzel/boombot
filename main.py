@@ -20,8 +20,7 @@ print("CD SET TO :",_CD_PATH,"\n")
 print("Starting browser!")
 os.system("chromeprofgen.bat")
 
-roomcode = input("Enter room code: ")
-URL ="https://jklm.fun/"+roomcode
+
 
 
 
@@ -36,6 +35,9 @@ words.pop()
 opts = Options()
 opts.add_experimental_option('debuggerAddress','localhost:6969')
 drv = webdriver.Chrome(options=opts )
+roomcode = input("Enter room code: ")
+URL ="https://jklm.fun/"+roomcode
+drv.delete_all_cookies()
 drv.get(URL)
 
 hasSwitched = False
@@ -71,10 +73,12 @@ def enterWord(syll):
         time.sleep(1)
         if isMyTurn():
             print("Rejected",toSend)
-            words.remove(toSend)   
+            words.remove(toSend)
+            print("Words in bank: ",len(words))   
             enterWord(syll)
         else:
             words.remove(toSend)   
+            print("Words in bank: ",len(words))   
             print("Accepted",toSend)
 
     except:
