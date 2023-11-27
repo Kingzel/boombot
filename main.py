@@ -57,13 +57,20 @@ def isMyTurn():
     except:
         return False       
 def enterWord(syll):
+    best = 0
     toSend = ""
+    count = 0
     for word in words:
         if syll.lower() in word:
-            toSend = word
-            break
+            count+=1
+            if len(set(list(word))) > best:
+                best = len(set(list(word)))
+                toSend = word
+                            
     try:
-        print("Trying word",toSend)
+        print("Possible words: ",count,"words")
+        print("Trying",toSend)
+        print("Unique letters:",best)
         drv.find_element(By.XPATH,_INPT_XPATH).send_keys(toSend)    
         drv.find_element(By.XPATH,_INPT_XPATH).send_keys(Keys.ENTER)
         time.sleep(1)
@@ -76,6 +83,7 @@ def enterWord(syll):
             words.remove(toSend)   
             print("Words in bank: ",len(words))   
             print("Accepted",toSend)
+            print("--------------------","\n")
 
     except:
         time.sleep(1)
@@ -87,6 +95,7 @@ while drv.service.is_connectable:
  if URL in drv.current_url and iframeSwitch() and isMyTurn():
     syll = drv.find_element(By.XPATH,_SYLL_XPATH).text
     if prev_syll != syll:
+        print("--------------------")
         print("Current syllable:",syll)
         enterWord(syll)
         prev_syll = syll    
