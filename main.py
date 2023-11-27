@@ -20,10 +20,6 @@ print("CD SET TO :",_CD_PATH,"\n")
 print("Starting browser!")
 os.system("chromeprofgen.bat")
 
-
-
-
-
 words=[]
 with open('words.txt','r') as f:
    for lines in f:
@@ -91,10 +87,7 @@ while drv.service.is_connectable:
  if URL in drv.current_url and iframeSwitch() and isMyTurn():
     syll = drv.find_element(By.XPATH,_SYLL_XPATH).text
     if prev_syll != syll:
-        print("Current syllable: ",syll)
+        print("Current syllable:",syll)
         enterWord(syll)
-        prev_syll = syll
-    
-
+        prev_syll = syll    
 drv.quit() 
-
