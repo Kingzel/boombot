@@ -9,8 +9,7 @@ import time
 _SYLL_XPATH = ".//html//body//div[@class='main page']//div[@class='middle']//div[@class='canvasArea']//div[@class='round']//div[@class='syllable']"
 _INPT_XPATH = ".//html//body//div[@class='main page']//div[@class='bottom']//div[@class='round']//div[@class='selfTurn']//form//input"
 _CD_PATH =os.path.dirname(__file__)
-
-
+_LETTERS = set(list("abcdefghijklmnopqrstuvwy"))
 
 
 
@@ -57,20 +56,27 @@ def isMyTurn():
     except:
         return False       
 def enterWord(syll):
+    global _LETTERS
     best = 0
     toSend = ""
+    backup=""
     count = 0
     for word in words:
         if syll.lower() in word:
+
             count+=1
-            if len(set(list(word))) > best:
-                best = len(set(list(word)))
+            if len(_LETTERS.intersection(set(list(word)))) > best:
+                best = len(_LETTERS.intersection(set(list(word))))
                 toSend = word
+            backup = word
+        
                             
     try:
+        if toSend =="":
+            toSend = backup
         print("Possible words: ",count,"words")
         print("Trying",toSend)
-        print("Unique letters:",best)
+        print("Letters eliminated:",best,_LETTERS.intersection(set(list(toSend))))
         drv.find_element(By.XPATH,_INPT_XPATH).send_keys(toSend)    
         drv.find_element(By.XPATH,_INPT_XPATH).send_keys(Keys.ENTER)
         time.sleep(1)
@@ -83,6 +89,14 @@ def enterWord(syll):
             words.remove(toSend)   
             print("Words in bank: ",len(words))   
             print("Accepted",toSend)
+            _LETTERS.difference_update(set(list(toSend)))
+            if len(_LETTERS) ==0:
+                print("All letters completed!")
+                print("Letters have been reset!")
+                _LETTERS = set(list("abcdefghijklmnopqrstuvwy"))
+            else:
+                print("Letters remaining for bonus:",len(_LETTERS),_LETTERS)
+
             print("--------------------","\n")
 
     except:
@@ -99,4 +113,4 @@ while drv.service.is_connectable:
         print("Current syllable:",syll)
         enterWord(syll)
         prev_syll = syll    
-drv.quit() 
+drv.quit()  
