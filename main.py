@@ -2,6 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
+from tkinter import simpledialog
 import os
 import time
 
@@ -10,7 +11,6 @@ _SYLL_XPATH = ".//html//body//div[@class='main page']//div[@class='middle']//div
 _INPT_XPATH = ".//html//body//div[@class='main page']//div[@class='bottom']//div[@class='round']//div[@class='selfTurn']//form//input"
 _CD_PATH =os.path.dirname(__file__)
 _LETTERS = set(list("abcdefghijklmnopqrstuvwy"))
-
 
 
 os.chdir(_CD_PATH)
@@ -30,7 +30,7 @@ words.pop()
 opts = Options()
 opts.add_experimental_option('debuggerAddress','localhost:6969')
 drv = webdriver.Chrome(options=opts )
-roomcode = input("Enter room code: ")
+roomcode  = str(simpledialog.askstring("Boombot","Enter jklm.fun roomcode"))
 URL ="https://jklm.fun/"+roomcode
 drv.delete_all_cookies()
 drv.get(URL)
